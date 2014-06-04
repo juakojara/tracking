@@ -15,7 +15,10 @@
  			<div class="container-fluid">
     			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     				<a class="navbar-brand" href="#" style="color:white">Track Soft</a>
-      				<p class="navbar-text pull-right" style="color:white"><strong>Bienvenido : Usuario !</strong></p>
+      				<p class="navbar-text pull-right" style="color:white">
+      					<strong>Bienvenido : {{ Auth::user()->nombre }}</strong>
+						<a href="{{ URL::to('admin/logout') }}">(Logout)</a>
+      				</p>
     			</div><!-- /.navbar-collapse -->
   			</div><!-- /.container-fluid -->
   		</div>

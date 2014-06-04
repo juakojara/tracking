@@ -17,6 +17,8 @@ Route::group(array('prefix' => 'admin'), function()
 	// Login
 	Route::get('login', 'AuthController@getLogin');
 	Route::post('login', 'AuthController@postLogin');
+    // Logout
+    Route::get('logout', 'AuthController@getLogout');
 
 	// Pantalla Bienvenida
 	Route::get('/', 'AuthController@getWelcome');

@@ -38,7 +38,7 @@ class AuthController extends BaseController {
       {
          Auth::logout();
       }
-      return Redirect::to('auth/login');
+      return Redirect::to('admin/login');
    }
 
 }

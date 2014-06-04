@@ -2,11 +2,18 @@
 
 class ClienteController extends \BaseController {
 
+	private $autorizado;
+	public function __construct()
+	{
+	    $this->autorizado = (Auth::check() and Auth::user()->tipo_personal_id > 1);
+	} 
+
 	/**
 	 * Lista todos los clientes.
 	 */
 	public function index()
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$clientes = Cliente::all();
 		return View::make('admin.clientes.index', array('clientes' => $clientes));
 	}
@@ -17,6 +24,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function create()
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
    		$cliente = new Cliente();
 		return View::make('admin.clientes.create')->with('cliente', $cliente);
 	}
@@ -27,6 +35,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function store()
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = new Cliente();
 		$cliente->email = Input::get('email');
 		$cliente->nombre = Input::get('nombre');
@@ -60,6 +69,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function show($id)
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = Cliente::find($id);
    		return View::make('admin.clientes.show')->with('cliente', $cliente);
 	}
@@ -70,6 +80,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = Cliente::find($id);
    		return View::make('admin.clientes.create')->with('cliente', $cliente);		
 	}
@@ -80,6 +91,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function update($id)
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = Cliente::find($id);
 		$cliente->email = Input::get('email');
 		$cliente->nombre = Input::get('nombre');
@@ -111,6 +123,7 @@ class ClienteController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = Cliente::find($id);
 		$cliente->delete();
 	   	return Redirect::to('admin/clientes')->with('notice', 'El cliente ha sido eliminado correctamente.');
