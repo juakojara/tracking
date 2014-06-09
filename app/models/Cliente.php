@@ -18,10 +18,10 @@ class Cliente extends Eloquent {
         'password2' => 'required|same:password'
     );
 
-    // Validar Email UNIQUE
-    public static function validate($data, $id=null){
-      $reglas = self::$rules;
-      $reglas['email'] = str_replace('id', $id, self::$rules['email']);
-      return Validator::make($data, $reglas);
-    }
+  // Validar Email UNIQUE
+  public static function validate($data, $id=null){
+    $reglas = self::$rules;
+    $reglas['email'] = str_replace('id', $id, self::$rules['email']);
+    return Validator::make($data, $reglas);
+  }
 }

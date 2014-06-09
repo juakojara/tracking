@@ -23,10 +23,19 @@ Route::group(array('prefix' => 'admin'), function()
 	// Pantalla Bienvenida
 	Route::get('/', 'AuthController@getWelcome');
 
-    // Módulo de clientes
+    /**
+     * Módulo de Clientes
+     */
     Route::resource('clientes', 'ClienteController');
-    // Busqueda Cliente
+    // Busqueda
     Route::post('clientes/search', 'ClienteController@buscar');
+
+    /*
+        Módulo de Personal
+    */
+    Route::resource('personal', 'PersonalController');
+    // Busqueda
+    Route::post('personal/search', 'PersonalController@buscar');
 
     // Módulo de pagos
     Route::resource('pagos', 'PagoController');

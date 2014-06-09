@@ -7,8 +7,23 @@ class Personal extends Eloquent implements UserInterface{
 
 	// Relacion
 	public function tipoPersonal()
-	{
-		return $this->hasOne('TipoPersonal', 'id');
+	{	
+		return $this->belongsTo('TipoPersonal');
+	}
+
+	// Reglas
+	public static $rules = array(
+        'nombre' => 'required',
+        'email' => 'required|email|unique:personal,email,id',
+        'password' => 'required',
+        'password2' => 'required|same:password'
+    );
+
+    // Validar Email UNIQUE
+	public static function validate($data, $id=null){
+	   $reglas = self::$rules;
+	   $reglas['email'] = str_replace('id', $id, self::$rules['email']);
+	   return Validator::make($data, $reglas);
 	}
 
 	// Autenticación

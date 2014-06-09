@@ -6,13 +6,14 @@
 
 @section('menu')
 	<div class="list-group">
-		@if(Auth::check() and Auth::user()->tipo_personal_id == 1)
-			<a href="#" class="list-group-item text-center">Clientes</a>
+		
+		@if(Auth::check() and Auth::user()->tipo_personal_id != 2)
+			<a href="{{ URL::to('admin/personal') }}" class="list-group-item text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Cuentas de Usuario</a>
 		@else
 		
 		<a href="#" class="list-group-item text-center">Tickets</a>
 		<a href="#" class="list-group-item text-center">Pagos</a>
-		<a href="#" class="list-group-item text-center">Usuarios</a>
+
 		<a href="#" class="list-group-item text-center">Reportes</a>
 		@endif
 	</div>
