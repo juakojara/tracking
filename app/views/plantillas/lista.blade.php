@@ -29,7 +29,13 @@
 			<div class="col-md-3 well">
 				<h3 class="text-center">Menú</h3>
 				<hr>
-				@yield('menu')
+				<div class="list-group">
+					@if(Auth::check() and Auth::user()->tipo_personal_id != 2)
+						<a href="{{ URL::to('admin/personal') }}" class="list-group-item text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Cuentas de Usuario</a>
+					@elseif(Auth::check() and Auth::user()->tipo_personal_id != 1)
+						<a href="{{ URL::to('admin/clientes') }}" class="list-group-item text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Clientes</a>
+					@endif
+				</div>
 			</div>
 			<div class="col-md-9 well">
 				@yield('contenido')

@@ -2,87 +2,150 @@
 
 class PagoController extends \BaseController {
 
+	private $autorizado;
+	public function __construct()
+	{
+	    $this->autorizado = (Auth::check() and Auth::user()->tipo_personal_id != 1);
+	} 
+
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
+	 * Lista todos los pagos.
 	 */
 	public function index()
 	{
-		$pagos = PagoCliente::all();
-		return View::make('admin.pagos.index', array('pagos' => $pagos));	
 	}
 
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
+	 * Mostrar Formulario de registro
 	 */
 	public function create()
 	{
-		$pagos = new PagoCliente();
-		return View::make('admin.pagos.create')->with('pagos', $pagos);
+		if(!$this->autorizado) return Redirect::to('admin/login');
+   		$pagos = new PagoCliente();
+   		// Tipos y estados para llenar Select
+   		$tipos = TipoPago::lists('descripcion', 'id');
+   		$estados = EstadoPago::lists('descripcion', 'id');
+   		$cliente = Cliente::find($_GET['cliente']);
+		return View::make('admin.pagos.create', array('pagos' => $pagos, 'tipos' => $tipos, 'estados' => $estados, 'cliente' => $cliente));
 	}
 
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
+	 * Insertar nuevo registro en la DB
 	 */
 	public function store()
 	{
-		//
+		if(!$this->autorizado) return Redirect::to('admin/login');
+		$cliente = Cliente::find($_POST['cliente']);
+		// Tipos y estados para llenar Select
+   		$tipos = TipoPago::lists('descripcion', 'id');
+   		$estados = EstadoPago::lists('descripcion', 'id');
+		// Capturar datos
+		$pagos = new PagoCliente();
+		$pagos->cliente_id = Input::get('cliente');
+		$pagos->tipo_pago_id = Input::get('tipo');
+		$pagos->monto = Input::get('monto');
+		$pagos->fecha = Input::get('date');
+		$pagos->numero_documento = Input::get('documento');
+		$pagos->descripcion = Input::get('descripcion');
+		$pagos->estado_pago_id = Input::get('estado');
+
+		// Validar datos
+		$validator = PagoCliente::validate(array(
+		    'monto' => Input::get('monto'),
+		    'date' => Input::get('date'),
+		    'numero_documento' => Input::get('documento'),
+		    'descripcion' => Input::get('descripcion')
+		));
+
+		if($validator->fails()){
+	      	$errors = $validator->messages()->all();
+	      	
+	      	$cliente = Cliente::find($_POST['cliente']);
+	      	return View::make('admin/pagos/create', array('pagos'=> $pagos, 'errors' => $errors, 'cliente' => $cliente, 'tipos' => $tipos, 'estados' => $estados ));
+	   	}else{
+	      	$pagos->save();
+			return Redirect::to('admin/clientes/'.Input::get('cliente'))->with('notice', 'El pago ha sido agregado correctamente.');
+	   }
+		
 	}
 
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * Mostrar un registro
 	 */
 	public function show($id)
 	{
-		//
+
 	}
 
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 *  Muestra formulario para modificar
 	 */
 	public function edit($id)
 	{
-		//
+		if(!$this->autorizado) return Redirect::to('admin/login');
+		$pagos = PagoCliente::find($id);
+   		// Tipos de Personal, como Lists para llenar select.
+   		$cliente = Cliente::find($_GET['cliente']);
+   		$tipos = TipoPago::lists('descripcion', 'id');
+   		$estados = EstadoPago::lists('descripcion', 'id');
+		return View::make('admin.pagos.create', array('cliente' => $cliente, 'pagos' => $pagos, 'tipos'=>$tipos, 'estados'=>$estados));
 	}
 
 
 	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * Updatea
 	 */
 	public function update($id)
 	{
-		//
+		if(!$this->autorizado) return Redirect::to('admin/login');
+
+		$cliente = Cliente::find($_POST['cliente']);
+		// Tipos y estados para llenar Select
+   		$tipos = TipoPago::lists('descripcion', 'id');
+   		$estados = EstadoPago::lists('descripcion', 'id');
+		// Capturar datos
+		$pagos = PagoCliente::find($id);
+		$pagos->cliente_id = Input::get('cliente');
+		$pagos->tipo_pago_id = Input::get('tipo');
+		$pagos->monto = Input::get('monto');
+		$pagos->fecha = Input::get('date');
+		$pagos->numero_documento = Input::get('documento');
+		$pagos->descripcion = Input::get('descripcion');
+		$pagos->estado_pago_id = Input::get('estado');
+
+		// Validar datos
+		$validator = PagoCliente::validate(array(
+		    'monto' => Input::get('monto'),
+		    'date' => Input::get('date'),
+		    'numero_documento' => Input::get('documento'),
+		    'descripcion' => Input::get('descripcion')
+		));
+
+		if($validator->fails()){
+	      	$errors = $validator->messages()->all();
+	      	return View::make('admin/pagos/create', array('pagos'=> $pagos, 'errors' => $errors, 'cliente' => $cliente, 'tipos' => $tipos, 'estados' => $estados ));
+	   	}else{
+	      	$pagos->save();
+			return Redirect::to('admin/clientes/'.Input::get('cliente'))->with('notice', 'El pago ha sido modificado correctamente.');
+	   }
 	}
 
 
 	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * Eliminar
 	 */
 	public function destroy($id)
 	{
-		//
+		if(!$this->autorizado) return Redirect::to('admin/login');
+		$pago = PagoCliente::find($id);
+		$pago->delete();
+	   	return Redirect::back()->with('notice', 'El pago ha sido eliminado correctamente.');
 	}
+
 
 
 }

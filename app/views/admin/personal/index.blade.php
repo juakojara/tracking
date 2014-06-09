@@ -4,21 +4,6 @@
 	Lista de Usuarios
 @stop
 
-@section('menu')
-	<div class="list-group">
-		
-		@if(Auth::check() and Auth::user()->tipo_personal_id != 2)
-			<a href="{{ URL::to('admin/personal') }}" class="list-group-item text-center"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Cuentas de Usuario</a>
-		@else
-		
-		<a href="#" class="list-group-item text-center">Tickets</a>
-		<a href="#" class="list-group-item text-center">Pagos</a>
-
-		<a href="#" class="list-group-item text-center">Reportes</a>
-		@endif
-	</div>
-@stop
-
 @section('contenido')
 	<h2 class="text-center">Cuentas de Usuarios</h2>
 	<hr>
@@ -33,8 +18,7 @@
 		<div class="col-md-3">
 			<a href="personal/create" class="btn btn-negro"><span class="glyphicon glyphicon-plus" style="margin-right:5px"></span>Nuevo Usuario</a>
 		</div>
-		<div class="col-md-4 pull-right">
-			<!-- Búsqueda -->
+		<!-- <div class="col-md-4 pull-right">
 			<div class="row">
 			<div class="col-md-7">
 				{{ Form::open(array('url'=>'admin/personal/search')) }}
@@ -44,7 +28,7 @@
 				{{ Form::button("<span class='glyphicon glyphicon-search' style='margin-right:5px'></span>&nbsp;Buscar", array('type'=>'submit','class'=>'btn btn-negro pull-left'))}}
 			{{ Form::close() }}
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<br><br>
 	<table class="table table-bordered">

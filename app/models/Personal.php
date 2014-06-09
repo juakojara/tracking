@@ -8,7 +8,7 @@ class Personal extends Eloquent implements UserInterface{
 	// Relacion
 	public function tipoPersonal()
 	{	
-		return $this->belongsTo('TipoPersonal');
+		return $this->belongsTo('TipoPersonal', 'tipo_personal_id');
 	}
 
 	// Reglas

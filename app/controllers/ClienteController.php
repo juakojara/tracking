@@ -71,7 +71,8 @@ class ClienteController extends \BaseController {
 	{
 		if(!$this->autorizado) return Redirect::to('admin/login');
 		$cliente = Cliente::find($id);
-   		return View::make('admin.clientes.show')->with('cliente', $cliente);
+		$pagos = PagoCliente::where('cliente_id', '=', $id)->get();
+   		return View::make('admin.clientes.show', array('cliente' => $cliente, 'pagos' => $pagos));
 	}
 
 

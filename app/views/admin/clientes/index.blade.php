@@ -18,8 +18,7 @@
 		<div class="col-md-3">
 			<a href="clientes/create" class="btn btn-negro"><span class="glyphicon glyphicon-plus" style="margin-right:5px"></span>Nuevo Cliente</a>
 		</div>
-		<div class="col-md-4 pull-right">
-			<!-- Búsqueda -->
+		<!-- <div class="col-md-4 pull-right">
 			<div class="row">
 			<div class="col-md-7">
 				{{ Form::open(array('url'=>'admin/clientes/search')) }}
@@ -29,7 +28,7 @@
 				{{ Form::button("<span class='glyphicon glyphicon-search' style='margin-right:5px'></span>&nbsp;Buscar", array('type'=>'submit','class'=>'btn btn-negro pull-left'))}}
 			{{ Form::close() }}
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<br><br>
 	<table class="table table-bordered">
